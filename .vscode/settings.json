@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "font5x7_1.h": "c",
+        "ir_uart.h": "c",
+        "navswitch.h": "c"
+    }
+}
