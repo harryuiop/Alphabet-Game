@@ -19,10 +19,10 @@
 #define MESSAGE_RATE 10
 
 
+
 char* game_total = "0";
 char* game_letter[] = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
 int index = 0;
-int index_cap = 0;
 
 typedef enum {
     SETUP,
@@ -62,10 +62,8 @@ while (1) {
             break;
 
         case START_ROUND:
-
             if (navswitch_push_event_p(NAVSWITCH_NORTH)) {
-                if (index <= index+3)
-
+                index++;
                 tinygl_text(game_letter[index]);
             }
 
@@ -78,13 +76,14 @@ while (1) {
                 led_set(LED1, 0);
                 ir_uart_putc(index);
                 tinygl_clear();
-                index_cap = index;
             }
 
             if (ir_uart_read_ready_p()) {
                 index = ir_uart_getc();
                 tinygl_text(game_letter[index]);
                 led_set(LED1, 1);
+
+
             }
             break;
 
