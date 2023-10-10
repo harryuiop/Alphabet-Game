@@ -50,31 +50,31 @@ int main (void)
         switch (state)
         {
             case SETUP:
-                if (navswitch_push_event_p(NAVSWITCH_PUSH))
-                {
+                if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
                     tinygl_clear();
                     state = IN_PROGRESS;
                     display_pixel_set(player.x_pos1, 6, 1);
                     display_pixel_set(player.x_pos2, 6, 1);
                 }
-
                 tinygl_update();
                 break;
 
+
+
             case IN_PROGRESS:
-                if (navswitch_push_event_p(NAVSWITCH_WEST))
-                {   
+                if (navswitch_push_event_p(NAVSWITCH_WEST)) {   
                     moveLeft(&player);
                 }
-                if (navswitch_push_event_p(NAVSWITCH_EAST))
-                {
+                if (navswitch_push_event_p(NAVSWITCH_EAST)) {
                     moveRight(&player);
                 }
-                
                 break;
+
+
 
             case FINISHED:
                 break;
         }
     }
 }
+
