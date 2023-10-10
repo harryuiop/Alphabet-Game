@@ -3,6 +3,8 @@ Things to implement:
 2.  winner/loser message
 3.  force a loss at Z
 4.  game reset back to start and check for any lives left
+5.  Starting board (if you lose the previous round do you start next ?)
+6.  player who is starting can increment up to 4 on first turn instead of 3
 
 
 Things to fix:
