@@ -80,6 +80,9 @@ while (1) {
             if (ir_uart_read_ready_p()) {
                 index = ir_uart_getc();
                 tinygl_text(game_letter[index]);
+                led_set(LED1, 1);
+
+
             }
             break;
 
