@@ -1,0 +1,10 @@
+Things to implement:
+1.  life system
+2.  winner/loser message
+3.  force a loss at Z
+4.  game reset back to start and check for any lives left
+
+
+Things to fix:
+1.  turn off led when not your turn
+2.  being able to flick through when screen is off
