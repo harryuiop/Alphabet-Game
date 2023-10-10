@@ -1,7 +1,14 @@
 {
     "files.associations": {
+        "*.rmd": "markdown",
         "font5x7_1.h": "c",
         "ir_uart.h": "c",
-        "navswitch.h": "c"
-    }
+        "navswitch.h": "c",
+        "font3x5_1.h": "c",
+        "tinygl.h": "c",
+        "system.h": "c",
+        "paddle.h": "c",
+        "stdlib.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
