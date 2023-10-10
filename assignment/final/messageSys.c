@@ -4,29 +4,24 @@
 #include <stdint.h>
 
 
-int8_t encode(int8_t x, int8_t y) 
+int encode(int x, int y) 
 {
-int8_t combine = (x << 8) | y;
-return combine;
+int comb = x * (5 + 1) + y;
+return comb;
 }
 
 
-int8_t decodeX()
+int decodeX(int comb)
 {
-int y_mask = (1 << 8) - 1; // Create a mask with n lower bits set to 1
-int x_extracted = combined_value >> 8;
-return x_extracted;
+int x_extr = comb / (5 + 1);
+return x_extr;
 }
 
 
-int8_t decodeY()
+int decodeY(int comb)
 {
-int y_mask = (1 << 8) - 1; // Create a mask with n lower bits set to 1
-int y_extracted = combined_value & y_mask;
-return y_extracted;
+int y_extr = comb % (5 + 1);
+return y_extr;
 }
 
 
-int main(void) {
-    printf(encode(4,8));
-}

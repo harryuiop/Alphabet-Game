@@ -8,7 +8,10 @@
         "tinygl.h": "c",
         "system.h": "c",
         "paddle.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "ball.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

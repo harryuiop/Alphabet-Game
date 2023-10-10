@@ -10,6 +10,8 @@
 #include "led.h"
 #include "ir_uart.h"
 #include "paddle.h"
+#include "messageSys.h"
+#include "ball.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,40 +43,54 @@ int main (void)
 
     tinygl_text("PONG! PRESS TO PLAY");
     paddle_t player = {0,1};
-    while (1)
-    {
-        pacer_wait();
-        tinygl_update();
-        navswitch_update();
+    tinygl_point_t ball = {1,6};
+    uint16_t ball_update_timer = 0;
+const uint16_t BALL_UPDATE_INTERVAL = 500; // 500 milliseconds (half a second)
 
-        switch (state)
-        {
-            case SETUP:
-                if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-                    tinygl_clear();
-                    state = IN_PROGRESS;
-                    display_pixel_set(player.x_pos1, 6, 1);
-                    display_pixel_set(player.x_pos2, 6, 1);
-                }
-                tinygl_update();
-                break;
+while (1) {
+    pacer_wait();
+    tinygl_update();
+    navswitch_update();
+    display_update();
+    uint16_t ball_update_timer = 0;
+    const uint16_t BALL_UPDATE_INTERVAL = 500; // 500 milliseconds (half a second)  
 
+    // Increment the timer with the pacer rate (in this case, 500 ms)
+    ball_update_timer += PACER_RATE;
 
+    switch (state) {
+        case SETUP:
+            if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
+                tinygl_clear();
+                state = IN_PROGRESS;
+                display_pixel_set(player.x_pos1, 6, 1);
+                display_pixel_set(player.x_pos2, 6, 1);
+            }
+            break;
 
-            case IN_PROGRESS:
-                if (navswitch_push_event_p(NAVSWITCH_WEST)) {   
-                    moveLeft(&player);
-                }
-                if (navswitch_push_event_p(NAVSWITCH_EAST)) {
-                    moveRight(&player);
-                }
-                break;
+        case IN_PROGRESS:
+            if (navswitch_push_event_p(NAVSWITCH_WEST)) {   
+                moveLeft(&player);
+            }
+            if (navswitch_push_event_p(NAVSWITCH_EAST)) {
+                moveRight(&player);
+            }
 
+            if (navswitch_push_event_p(NAVSWITCH_NORTH)) {
+                // Handle any other actions related to the north button here.
+            }
 
+            // Check if it's time to update the ball's position
+            if (ball_update_timer >= BALL_UPDATE_INTERVAL) {
+                update_ball(&ball);
+                ball_update_timer = 0; // Reset the timer
+            } 
+            break;
 
-            case FINISHED:
-                break;
-        }
+        case FINISHED:
+            break;
     }
+}
+
 }
 
