@@ -19,6 +19,9 @@
 #define MESSAGE_RATE 10
 
 
+char* game_total = "0";
+char* game_letter[] = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+int index = 0;
 
 typedef enum {
     SETUP,
@@ -30,18 +33,16 @@ game_state state = SETUP;
 
 int main (void)
 {
-
     system_init ();
     navswitch_init ();
     ir_uart_init ();
-    // led_init ();
+    led_init ();
     // led_set(LED1, 0);
     pacer_init (PACER_RATE);
     tinygl_init (PACER_RATE);
     tinygl_font_set(&font5x7_1);
     tinygl_text_speed_set (MESSAGE_RATE);
-    tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
-    tinygl_text("21 Press to Start");
+    tinygl_text(game_total);
 
 
 while (1) {
@@ -55,21 +56,31 @@ while (1) {
             if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
                 state = START_ROUND;
                 tinygl_clear();
-                tinygl_text("HIT");
+                tinygl_text(game_letter[index]);
             }
             break;
 
-
         case START_ROUND:
-
             if (navswitch_push_event_p(NAVSWITCH_NORTH)) {
-                tinygl_text("HIT");
+                index++;
+                tinygl_text(game_letter[index]);
             }
 
             if (navswitch_push_event_p(NAVSWITCH_SOUTH)) {
-                tinygl_text("STAY");
+                index--;
+                tinygl_text(game_letter[index]);
             }
 
+            if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
+                led_set(LED1, 0);
+                ir_uart_putc(index);
+                tinygl_clear();
+            }
+
+            if (ir_uart_read_ready_p()) {
+                index = ir_uart_getc();
+                tinygl_text(game_letter[index]);
+            }
             break;
 
         case FINISHED:
