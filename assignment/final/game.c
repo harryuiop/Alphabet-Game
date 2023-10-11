@@ -86,9 +86,6 @@ void receive_letter(void)
     maxpush = index + 3;
 }
 
-void navswitchreset() {
-    navswitchPressed = false;
-}
 
 void setup_game()
 {
