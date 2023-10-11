@@ -1,4 +1,4 @@
-// 260 Assingment: Harry Ellis & Sean Gouw
+// 260 Assignment: Harry Ellis & Sean Gouw
 
 #include <avr/io.h>
 #include "system.h"
@@ -39,7 +39,7 @@ int maxpush = 3;
 int index = 0;
 
 
-void increament_letter(void) 
+void increment_letter(void) 
 {
     if (index < maxpush) {
         if (index < 25) { 
@@ -60,7 +60,8 @@ void decrement_letter(void)
 
 
 void send_letter(void)
-{
+{   
+ 
     if (index > maxpush - 3) {
         if (index != 25) { 
             led_set(LED1, 0);
@@ -69,10 +70,11 @@ void send_letter(void)
         } else {
             tinygl_clear();
             tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-            tinygl_text("LOSS");
+            tinygl_text("LOSER");
             state = FINISHED;
         }
     }
+
 }
 
 
@@ -84,6 +86,9 @@ void receive_letter(void)
     maxpush = index + 3;
 }
 
+void navswitchreset() {
+    navswitchPressed = false;
+}
 
 void setup_game()
 {
@@ -125,7 +130,7 @@ while (1) {
 
         case START_ROUND:
             if (navswitch_push_event_p(NAVSWITCH_NORTH)) {
-                increament_letter(); 
+                increment_letter(); 
             }
 
             if (navswitch_push_event_p(NAVSWITCH_SOUTH)) {

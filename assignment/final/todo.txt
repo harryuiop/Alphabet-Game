@@ -1,12 +1,12 @@
 Things to implement:
 1.  life system
-2.  winner/loser message
-3.  force a loss at Z
-4.  game reset back to start and check for any lives left
-5.  Starting board (if you lose the previous round do you start next ?)
+2.  winner/loser message (HALF DONE)
+3.  force a loss at Z (DONE)
+4.  game reset back to start (DONE) and check for any lives left
+5.  Starting board (if you lose the previous round do you start next ?)(this is done because whoever gets Z, must click through and starts at A)
 6.  player who is starting can increment up to 4 on first turn instead of 3
 
 
 Things to fix:
-1.  turn off led when not your turn
+1.  turn off led when not your turn (DONE)
 2.  being able to flick through when screen is off
