@@ -72,9 +72,9 @@ void send_letter(void)
             tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
             tinygl_text("LOSER");
             state = FINISHED;
+            ir_uart_putc('W');
         }
     }
-
 }
 
 
@@ -139,7 +139,12 @@ while (1) {
             }
 
             if (ir_uart_read_ready_p()) {
+                if (ir_uart_putc == "W") {
+                    tinygl_text("W");
+                    break;
+                } else {
                 receive_letter();
+                }
             }
 
             break;
