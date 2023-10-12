@@ -86,18 +86,7 @@ void send_letter(void)
         }
     }
 }
-        if (index != 25) {
-            led_set(LED1, 0);
-            ir_uart_putc(index);
-            tinygl_clear();
-            myturn = 0;
-        } else {
-            tinygl_clear();
-            tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
-            tinygl_text("LOSER");
-            state = FINISHED;
-            ir_uart_putc('W');
-        }
+
 
 void receive_letter(void)
 {
@@ -145,15 +134,7 @@ int main(void) {
     tinygl_text(game_total);
 
     while (1) {
-        pacer_wait();              if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-                    start_game = 0; // Reset the game
-                    maxpush = 3;
-                    index = 0;
-                    state = SETUP;
-                    tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
-                    ir_uart_putc('E');
-                    setup_game();
-                }
+        pacer_wait();
         tinygl_update();
         navswitch_update();
         display_update();
