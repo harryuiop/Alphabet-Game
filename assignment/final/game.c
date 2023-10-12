@@ -36,16 +36,16 @@ game_state state = SETUP;
 
 
 int maxpush = 3;
-int index = 0;
+int currentIndex = 0;
 int myturn = 1;
 
 
 void increment_letter(void) 
 {
-    if (index < maxpush) {
-        if (myturn && index < 25) { 
-            index++;
-            tinygl_text(game_letter[index]);
+    if (currentIndex < maxpush) {
+        if (myturn && currentIndex < 25) { 
+            currentIndex++;
+            tinygl_text(game_letter[currentIndex]);
         }
     }
 }
@@ -53,9 +53,9 @@ void increment_letter(void)
 
 void decrement_letter(void)
 {
-    if (myturn && index > maxpush - 2) {
-        index--;
-        tinygl_text(game_letter[index]);
+    if (myturn && currentIndex > maxpush - 2) {
+        currentIndex--;
+        tinygl_text(game_letter[currentIndex]);
     }
 }
 
@@ -63,10 +63,10 @@ void decrement_letter(void)
 void send_letter(void)
 {   
  
-    if (myturn && index > maxpush - 3) {
-        if (index != 25) { 
+    if (myturn && currentIndex > maxpush - 3) {
+        if (currentIndex != 25) { 
             led_set(LED1, 0);
-            ir_uart_putc(index);
+            ir_uart_putc(currentIndex);
             tinygl_clear();
             myturn = 0;
         } else {
@@ -74,7 +74,6 @@ void send_letter(void)
             tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
             tinygl_text("LOSER");
             state = FINISHED;
-            ir_uart_putc('W');
         }
     }
 }
@@ -82,22 +81,22 @@ void send_letter(void)
 
 void receive_letter(void)
 {
-    index = ir_uart_getc();
-    tinygl_text(game_letter[index]);
+    currentIndex = ir_uart_getc();
+    tinygl_text(game_letter[currentIndex]);
     led_set(LED1, 1);
-    maxpush = index + 3;
+    maxpush = currentIndex + 3;
     myturn = 1;
 }
 
 
-void setup_game()
+void setup_game(void)
 {
     if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
         maxpush = 3;
-        index = 0;
+        currentIndex = 0;
         state = START_ROUND;
         tinygl_clear();
-        tinygl_text(game_letter[index]);
+        tinygl_text(game_letter[currentIndex]);
         ir_uart_putc('S');
     }
 
@@ -151,14 +150,8 @@ while (1) {
             }
 
             if (ir_uart_read_ready_p()) {
-                if (ir_uart_putc == "W") {
-                    tinygl_text("W");
-                    break;
-                } else {
                 receive_letter();
-                }
             }
-
             break;
 
 
@@ -166,7 +159,7 @@ while (1) {
             if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
                 tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
                 maxpush = 3;
-                index = 0;
+                currentIndex = 0;
                 setup_game();
             }
             break;
