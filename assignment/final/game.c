@@ -98,7 +98,6 @@ void setup_game()
         state = START_ROUND;
         tinygl_clear();
         tinygl_text(game_letter[index]);
-
         ir_uart_putc('S');
     }
 
@@ -106,6 +105,7 @@ void setup_game()
         if (ir_uart_getc() == 'S') {
             tinygl_clear();
             state = START_ROUND;
+            myturn = 0;
         }
     }
 }
