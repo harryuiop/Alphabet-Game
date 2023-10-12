@@ -35,11 +35,16 @@ typedef enum {
 game_state state = SETUP;
 
 
-int maxpush = 3;
+// CurrentIndex sets where in the array the players are, maxpush sets how many letters a player has the option of
 int currentIndex = 0;
+int maxpush = 3;
+
+
+// Controls which player is allowed to use the navagation switch
 int myturn = 1;
 
 
+// Incremeants the letter on the LCD when the navagation swtich gets pushed north
 void increment_letter(void) 
 {
     if (currentIndex < maxpush) {
@@ -51,6 +56,7 @@ void increment_letter(void)
 }
 
 
+// Decreaments the letter on the LCD when the navagation swtich gets pushed south
 void decrement_letter(void)
 {
     if (myturn && currentIndex > maxpush - 2) {
@@ -60,9 +66,9 @@ void decrement_letter(void)
 }
 
 
+// Checks if a player is on the losing letter (default 'Z') and changes game state, else sends letter to other LCD using IR library
 void send_letter(void)
 {   
- 
     if (myturn && currentIndex > maxpush - 3) {
         if (currentIndex != 25) { 
             led_set(LED1, 0);
@@ -79,6 +85,7 @@ void send_letter(void)
 }
 
 
+// Recives a letter from the other player using the IR Library and displays it on the LCD 
 void receive_letter(void)
 {
     currentIndex = ir_uart_getc();
@@ -89,6 +96,8 @@ void receive_letter(void)
 }
 
 
+// Gets called in the intial game setup after clicking inital navigation switch push down
+// One player pushes navigation switch push down to start the game, this sends a message through IR to start other players game too
 void setup_game(void)
 {
     if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
@@ -109,14 +118,19 @@ void setup_game(void)
     }
 }
 
+
+// Only called after a game is complete to the same job as setup_game() without needing an input to start again
 void reset_game(void) {
-    state = SETUP;
     maxpush = 3;
     currentIndex = 0;
-    myturn = 1;
+    state = START_ROUND;
     tinygl_clear();
+    tinygl_text(game_letter[currentIndex]);
+    ir_uart_putc('S');
 }
 
+
+// Does an intial setup of the hardware components, then loops through the three game states continously.
 int main (void)
 {
     system_init ();
@@ -165,7 +179,7 @@ while (1) {
         case FINISHED:
             if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
                 tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
-                reset_game(); // Reset the game here
+                reset_game(); 
             }
             break;
         }
