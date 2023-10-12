@@ -89,6 +89,7 @@ void send_letter(void)
 void receive_letter(void)
 {
     currentIndex = ir_uart_getc();
+    tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
     tinygl_text(game_letter[currentIndex]);
     led_set(LED1, 1);
     maxpush = currentIndex + 3;
@@ -105,6 +106,7 @@ void setup_game(void)
         currentIndex = 0;
         state = START_ROUND;
         tinygl_clear();
+        tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
         tinygl_text(game_letter[currentIndex]);
         ir_uart_putc('S');
     }
@@ -112,6 +114,7 @@ void setup_game(void)
     if (ir_uart_read_ready_p()) {
         if (ir_uart_getc() == 'S') {
             tinygl_clear();
+            led_set(LED1, 0);
             state = START_ROUND;
             myturn = 0;
         }
@@ -141,7 +144,8 @@ int main (void)
     tinygl_init (PACER_RATE);
     tinygl_font_set(&font5x7_1);
     tinygl_text_speed_set (MESSAGE_RATE);
-    tinygl_text(game_total);
+    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    tinygl_text("PRESS TO START");
 
 
 while (1) {
