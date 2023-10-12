@@ -2,8 +2,6 @@ Things to implement:
 1.  life system
 2.  winner/loser message (HALF DONE)
 4.  game reset back to start (DONE) and check for any lives left
-5.  Starting board (if you lose the previous round do you start next ?)(this is done because whoever gets Z, must click through and starts at A)
-
 
 
 Things to fix:
