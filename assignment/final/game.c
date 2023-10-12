@@ -109,6 +109,13 @@ void setup_game(void)
     }
 }
 
+void reset_game(void) {
+    state = SETUP;
+    maxpush = 3;
+    currentIndex = 0;
+    myturn = 1;
+    tinygl_clear();
+}
 
 int main (void)
 {
@@ -157,10 +164,8 @@ while (1) {
 
         case FINISHED:
             if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-                tinygl_text_mode_set (TINYGL_TEXT_MODE_STEP);
-                maxpush = 3;
-                currentIndex = 0;
-                setup_game();
+                tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
+                reset_game(); // Reset the game here
             }
             break;
         }
