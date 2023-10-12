@@ -145,7 +145,15 @@ int main(void) {
     tinygl_text(game_total);
 
     while (1) {
-        pacer_wait();
+        pacer_wait();              if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
+                    start_game = 0; // Reset the game
+                    maxpush = 3;
+                    index = 0;
+                    state = SETUP;
+                    tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
+                    ir_uart_putc('E');
+                    setup_game();
+                }
         tinygl_update();
         navswitch_update();
         display_update();
