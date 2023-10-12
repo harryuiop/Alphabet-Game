@@ -14,3 +14,29 @@ The use the git push command to copy the changes to the remote git server
 
 git push
 
+
+Alphabet Game
+
+Authors: Harry Ellis & Sean Gouw 
+
+Works similarly to the game Twenty-One, but uses letters instead
+
+
+Game Instructions:
+
+Before starting, ensure you are in the correct directory (the one that contains the game)
+
+Type into the terminal directory "clean" or "make clean", then type "make" and then "make program". If running two UCFK's off of the same computer, please type "make program" again.
+
+Once two players are ready, whichever player would like to start will press the Navigation Switch in. On the starting player's board, the blue LED will be illuminated, signalling whos turn it is. Then, the starting player's LED matrix will begin display the letter 'A', while the other player's matrix is blank.
+
+The starting player can then increment the letter on their matrix by one, two, or three letters (e.g. D can increment to E, F, or G) by pushing the NavSwitch towards to top of the board. The player whos turn it is can also decrement back to their starting letter once it has reached the maximum increment possibility (e.g. if a player is sent L, they can increment up to O and can decrement from O to M).
+
+Once the player has decided what letter they would like to send, ensure the IR senders and receivers are lined up correctly, and press in on the NavSwitch. This sends the selected letter to the other player and ends the turn for the player who sent the letter. This is signalled by the Blue LED which will be illuminated when it your turn.
+
+The players continue sending each other letters until one player must increment to the letter 'Z' meaning that the player loses the game. 
+
+If the players would like to play again, the losing player must press in the NavSwitch, this will restart the game, and the player who lost the previous game will start. 
+
+The game then continues as it did before. 
+
