@@ -28,8 +28,7 @@ char* game_letter[] = {
 typedef enum {
     SETUP,
     START_ROUND,
-    FINISHED,
-    RESET_GAME
+    FINISHED
 } game_state;
 
 game_state state = SETUP;
@@ -87,7 +86,18 @@ void send_letter(void)
         }
     }
 }
-
+        if (index != 25) {
+            led_set(LED1, 0);
+            ir_uart_putc(index);
+            tinygl_clear();
+            myturn = 0;
+        } else {
+            tinygl_clear();
+            tinygl_text_mode_set(TINYGL_TEXT_MODE_SCROLL);
+            tinygl_text("LOSER");
+            state = FINISHED;
+            ir_uart_putc('W');
+        }
 
 void receive_letter(void)
 {
@@ -160,9 +170,8 @@ int main(void) {
                 }
 
                 if (ir_uart_read_ready_p()) {
-                    if (ir_uart_getc () == 'E') {
-                        tinygl_clear();
-                        state = SETUP;
+                    if (ir_uart_putc == 'W') {
+                        tinygl_text("W");
                         break;
                     } else {
                         receive_letter();
@@ -175,17 +184,6 @@ int main(void) {
                     tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
                     maxpush = 3;
                     index = 0;
-                    setup_game();
-                }
-            
-            case RESET_GAME: // Add a new state to reset the game
-                if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-                    start_game = 0; // Reset the game
-                    maxpush = 3;
-                    index = 0;
-                    state = SETUP;
-                    tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
-                    ir_uart_putc('E');
                     setup_game();
                 }
                 break;
