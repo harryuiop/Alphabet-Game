@@ -44,6 +44,9 @@ int maxpush = 3;
 int myturn = 1;
 
 
+// Initializes the number of lives each player of the game has
+int player_lives = 3;
+
 // Incremeants the letter on the LCD when the navagation swtich gets pushed north
 void increment_letter(void) 
 {
@@ -122,14 +125,26 @@ void setup_game(void)
 }
 
 
+void end_game(void)
+{
+    if (player_lives > 0) {
+        player_lives--;
+    } else {
+        tinygl_clear();
+        tinygl_text("Game Over");
+        state = FINISHED;
+    }
+}
+
 // Only called after a game is complete to the same job as setup_game() without needing an input to start again
-void reset_game(void) {
+void reset_game(void)
+{
+    player_lives = 3;
     maxpush = 3;
     currentIndex = 0;
     state = START_ROUND;
     tinygl_clear();
     tinygl_text(game_letter[currentIndex]);
-    ir_uart_putc('S');
 }
 
 
@@ -182,6 +197,7 @@ while (1) {
 
         case FINISHED:
             if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
+                end_game();
                 tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
                 reset_game(); 
             }
