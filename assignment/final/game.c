@@ -37,12 +37,13 @@ game_state state = SETUP;
 
 int maxpush = 3;
 int index = 0;
+int myturn = 1;
 
 
 void increment_letter(void) 
 {
     if (index < maxpush) {
-        if (index < 25) { 
+        if (myturn && index < 25) { 
             index++;
             tinygl_text(game_letter[index]);
         }
@@ -52,7 +53,7 @@ void increment_letter(void)
 
 void decrement_letter(void)
 {
-    if (index > maxpush - 2) {
+    if (myturn && index > maxpush - 2) {
         index--;
         tinygl_text(game_letter[index]);
     }
@@ -62,11 +63,12 @@ void decrement_letter(void)
 void send_letter(void)
 {   
  
-    if (index > maxpush - 3) {
+    if (myturn && index > maxpush - 3) {
         if (index != 25) { 
             led_set(LED1, 0);
             ir_uart_putc(index);
             tinygl_clear();
+            myturn = 0;
         } else {
             tinygl_clear();
             tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
@@ -84,6 +86,7 @@ void receive_letter(void)
     tinygl_text(game_letter[index]);
     led_set(LED1, 1);
     maxpush = index + 3;
+    myturn = 1;
 }
 
 
