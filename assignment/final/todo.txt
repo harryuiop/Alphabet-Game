@@ -6,4 +6,3 @@ Things to implement:
 
 Things to fix:
 1.  player who is starting can increment up to 4 on first turn instead of 3
-2.  Letter c coming up when game has been restarted

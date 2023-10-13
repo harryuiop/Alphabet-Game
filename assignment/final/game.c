@@ -47,7 +47,7 @@ int myturn = 1;
 // Initializes the number of lives each player of the game has
 int player_lives = 3;
 
-// Incremeants the letter on the LCD when the navagation swtich gets pushed north
+// Increments the letter on the LCD when the navagation swtich gets pushed north
 void increment_letter(void) 
 {
     if (currentIndex < maxpush) {
@@ -59,7 +59,7 @@ void increment_letter(void)
 }
 
 
-// Decreaments the letter on the LCD when the navagation swtich gets pushed south
+// Decrements the letter on the LCD when the navagation swtich gets pushed south
 void decrement_letter(void)
 {
     if (myturn && currentIndex > maxpush - 2) {
@@ -148,7 +148,7 @@ void reset_game(void)
 }
 
 
-// Does an intial setup of the hardware components, then loops through the three game states continously.
+// Does an intial setup of the hardware components, then loops through the three game states continuously.
 int main (void)
 {
     system_init ();
