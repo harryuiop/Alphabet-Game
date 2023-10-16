@@ -26,7 +26,7 @@ Game Instructions:
 
 Before starting, ensure you are in the correct directory (the one that contains the game)
 
-Type into the terminal directory "clean" or "make clean", then type "make" and then "make program". If running two UCFK's off of the same computer, please type "make program" again.
+Type into the terminal directory "clean" or m, then type "make" and then "make program". If running two UCFK's off of the same computer, please type "make program" again.
 
 Once two players are ready, whichever player would like to start will press the Navigation Switch in. On the starting player's board, the blue LED will be illuminated, signalling whos turn it is. Then, the starting player's LED matrix will begin display the letter 'A', while the other player's matrix is blank.
 
