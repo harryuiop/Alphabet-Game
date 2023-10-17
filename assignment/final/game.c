@@ -43,10 +43,6 @@ int maxpush = 3;
 // Controls which player is allowed to use the navagation switch
 int myturn = 1;
 
-
-// Initializes the number of lives each player of the game has
-int player_lives = 3;
-
 // Increments the letter on the LCD when the navagation swtich gets pushed north
 void increment_letter(void) 
 {
@@ -83,6 +79,7 @@ void send_letter(void)
             tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
             tinygl_text("LOSER");
             state = FINISHED;
+            ir_uart_putc('A');
         }
     }
 }
@@ -92,6 +89,19 @@ void send_letter(void)
 void receive_letter(void)
 {
     currentIndex = ir_uart_getc();
+
+    if (currentIndex == 'A') {
+        tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+        tinygl_text("WINNER");
+        return;
+    }
+
+    if (currentIndex == 'B') {
+        tinygl_clear();
+        return;
+    }
+
+
     tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
     tinygl_text(game_letter[currentIndex]);
     led_set(LED1, 1);
@@ -125,26 +135,15 @@ void setup_game(void)
 }
 
 
-void end_game(void)
-{
-    if (player_lives > 0) {
-        player_lives--;
-    } else {
-        tinygl_clear();
-        tinygl_text("Game Over");
-        state = FINISHED;
-    }
-}
-
 // Only called after a game is complete to the same job as setup_game() without needing an input to start again
 void reset_game(void)
 {
-    player_lives = 3;
     maxpush = 3;
     currentIndex = 0;
     state = START_ROUND;
     tinygl_clear();
     tinygl_text(game_letter[currentIndex]);
+    ir_uart_putc('B');
 }
 
 
@@ -171,7 +170,8 @@ while (1) {
 
 
     switch (state) {
-        case SETUP:
+        case SETUP:              
+
             setup_game();
             break;
 
@@ -192,12 +192,11 @@ while (1) {
             if (ir_uart_read_ready_p()) {
                 receive_letter();
             }
-            break;
+                break;
 
 
         case FINISHED:
             if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-                end_game();
                 tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
                 reset_game(); 
             }

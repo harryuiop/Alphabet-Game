@@ -1,5 +1,4 @@
 Things to implement:
-1.  life system
 2.  winner/loser message (HALF DONE) ( we need to send a winner message to the other board)
 4.  game reset back to start (DONE) and check for any lives left
 
