@@ -1,15 +1,21 @@
-// 260 Assignment: Harry Ellis & Sean Gouw
+/**  @file   game.c
+     @author Harry Ellis & Sean Gouw
+     @date   October 2023
+     @brief  Main game loop and variables for game function
+*/
+
 
 #include <avr/io.h>
 #include "system.h"
 #include "pacer.h"
 #include "navswitch.h"
-#include "tinygl.h"
 #include "../fonts/font5x7_1.h"
 #include "pio.h"
-#include "led.h"
 #include "ir_uart.h"
-#include "messageSys.h"
+#include "tinygl.h"
+#include "led.h"
+#include "logic.h"
+#include "communication.h"
 
 
 #include <stdio.h>
@@ -21,7 +27,6 @@
 #define MESSAGE_RATE 10
 
 
-char* game_total = "0";
 char* game_letter[] = {"A","B","C","D","E","F","G","H","I","J",
                         "K","L","M","N","O","P","Q","R","S","T",
                         "U","V","W","X","Y","Z"};
@@ -31,7 +36,9 @@ typedef enum {
     SETUP,
     START_ROUND,
     FINISHED
-} game_state;
+    } game_state;
+
+
 game_state state = SETUP;
 
 
@@ -42,109 +49,6 @@ int maxpush = 3;
 
 // Controls which player is allowed to use the navagation switch
 int myturn = 1;
-
-// Increments the letter on the LCD when the navagation swtich gets pushed north
-void increment_letter(void) 
-{
-    if (currentIndex < maxpush) {
-        if (myturn && currentIndex < 25) { 
-            currentIndex++;
-            tinygl_text(game_letter[currentIndex]);
-        }
-    }
-}
-
-
-// Decrements the letter on the LCD when the navagation swtich gets pushed south
-void decrement_letter(void)
-{
-    if (myturn && currentIndex > maxpush - 2) {
-        currentIndex--;
-        tinygl_text(game_letter[currentIndex]);
-    }
-}
-
-
-// Checks if a player is on the losing letter (default 'Z') and changes game state, else sends letter to other LCD using IR library
-void send_letter(void)
-{   
-    if (myturn && currentIndex > maxpush - 3) {
-        if (currentIndex != 25) { 
-            led_set(LED1, 0);
-            ir_uart_putc(currentIndex);
-            tinygl_clear();
-            myturn = 0;
-        } else {
-            tinygl_clear();
-            tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-            tinygl_text("LOSER");
-            state = FINISHED;
-            ir_uart_putc('A');
-        }
-    }
-}
-
-
-// Recives a letter from the other player using the IR Library and displays it on the LCD 
-void receive_letter(void)
-{
-    currentIndex = ir_uart_getc();
-
-    if (currentIndex == 'A') {
-        tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-        tinygl_text("WINNER");
-        return;
-    }
-
-    if (currentIndex == 'B') {
-        tinygl_clear();
-        return;
-    }
-
-
-    tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
-    tinygl_text(game_letter[currentIndex]);
-    led_set(LED1, 1);
-    maxpush = currentIndex + 3;
-    myturn = 1;
-}
-
-
-// Gets called in the intial game setup after clicking inital navigation switch push down
-// One player pushes navigation switch push down to start the game, this sends a message through IR to start other players game too
-void setup_game(void)
-{
-    if (navswitch_push_event_p(NAVSWITCH_PUSH)) {
-        maxpush = 3;
-        currentIndex = 0;
-        state = START_ROUND;
-        tinygl_clear();
-        tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
-        tinygl_text(game_letter[currentIndex]);
-        ir_uart_putc('S');
-    }
-
-    if (ir_uart_read_ready_p()) {
-        if (ir_uart_getc() == 'S') {
-            tinygl_clear();
-            led_set(LED1, 0);
-            state = START_ROUND;
-            myturn = 0;
-        }
-    }
-}
-
-
-// Only called after a game is complete to the same job as setup_game() without needing an input to start again
-void reset_game(void)
-{
-    maxpush = 3;
-    currentIndex = 0;
-    state = START_ROUND;
-    tinygl_clear();
-    tinygl_text(game_letter[currentIndex]);
-    ir_uart_putc('B');
-}
 
 
 // Does an intial setup of the hardware components, then loops through the three game states continuously.
@@ -171,7 +75,6 @@ while (1) {
 
     switch (state) {
         case SETUP:              
-
             setup_game();
             break;
 
