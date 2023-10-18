@@ -1,4 +1,9 @@
-// 260 Assignment: Harry Ellis & Sean Gouw
+/**  @file   game.c
+     @author Harry Ellis & Sean Gouw
+     @date   October 2023
+     @brief  Main game loop and variables for game function
+*/
+
 
 #include <avr/io.h>
 #include "system.h"
@@ -9,8 +14,6 @@
 #include "pio.h"
 #include "led.h"
 #include "ir_uart.h"
-#include "messageSys.h"
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +24,7 @@
 #define MESSAGE_RATE 10
 
 
-char* game_total = "0";
+
 char* game_letter[] = {"A","B","C","D","E","F","G","H","I","J",
                         "K","L","M","N","O","P","Q","R","S","T",
                         "U","V","W","X","Y","Z"};
