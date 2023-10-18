@@ -14,6 +14,9 @@
 #include "pio.h"
 #include "led.h"
 #include "ir_uart.h"
+#include "tinygl.h"
+#include "led.h"
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +25,7 @@
 
 #define PACER_RATE 550
 #define MESSAGE_RATE 10
+
 #define WINNER_IR_MSG 'A'
 #define RESET_GAME_MSG 'B'
 #define SETUP_GAME_MSG 'S'
@@ -37,6 +41,7 @@ typedef enum {
     START_ROUND,
     FINISHED
 } game_state;
+
 game_state state = SETUP;
 
 
