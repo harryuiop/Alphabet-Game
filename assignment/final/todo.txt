@@ -1,0 +1,7 @@
+Things to implement:
+2.  winner/loser message (HALF DONE) ( we need to send a winner message to the other board)
+4.  game reset back to start (DONE) and check for any lives left
+
+
+Things to fix:
+1.  player who is starting can increment up to 4 on first turn instead of 3
