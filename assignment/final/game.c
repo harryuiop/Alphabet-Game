@@ -22,7 +22,9 @@
 
 #define PACER_RATE 550
 #define MESSAGE_RATE 10
-
+#define WINNER_IR_MSG 'A'
+#define RESET_GAME_MSG 'B'
+#define SETUP_GAME_MSG 'S'
 
 
 char* game_letter[] = {"A","B","C","D","E","F","G","H","I","J",
@@ -82,7 +84,7 @@ void send_letter(void)
             tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
             tinygl_text("LOSER");
             state = FINISHED;
-            ir_uart_putc('A');
+            ir_uart_putc(WINNER_IR_MSG);
         }
     }
 }
@@ -93,13 +95,13 @@ void receive_letter(void)
 {
     currentIndex = ir_uart_getc();
 
-    if (currentIndex == 'A') {
+    if (currentIndex == WINNER_IR_MSG) {
         tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
         tinygl_text("WINNER");
         return;
     }
 
-    if (currentIndex == 'B') {
+    if (currentIndex == RESET_GAME_MSG) {
         tinygl_clear();
         return;
     }
@@ -124,11 +126,11 @@ void setup_game(void)
         tinygl_clear();
         tinygl_text_mode_set(TINYGL_TEXT_MODE_STEP);
         tinygl_text(game_letter[currentIndex]);
-        ir_uart_putc('S');
+        ir_uart_putc(SETUP_GAME_MSG);
     }
 
     if (ir_uart_read_ready_p()) {
-        if (ir_uart_getc() == 'S') {
+        if (ir_uart_getc() == SETUP_GAME_MSG) {
             tinygl_clear();
             led_set(LED1, 0);
             state = START_ROUND;
@@ -146,7 +148,7 @@ void reset_game(void)
     state = START_ROUND;
     tinygl_clear();
     tinygl_text(game_letter[currentIndex]);
-    ir_uart_putc('B');
+    ir_uart_putc(RESET_GAME_MSG);
 }
 
 
